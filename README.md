@@ -22,7 +22,6 @@
 - Análise contínua com SonarQube
 - Métricas de cobertura, duplicação e vulnerabilidades
 
-
 ---
 
 ## 🧠 Arquitetura
@@ -131,11 +130,11 @@ php artisan db:seed
 |-----------------------|-------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | Login                 | POST        | `http://localhost:8081/api/v1/login`              | Autentica usuário e retorna token<br><pre>email: usuario@bookbase.com<br>senha: 123456</pre>     |
 | 🔐 Logout             | POST        | `http://localhost:8081/api/v1/logout`             | Encerra a sessão do usuário (token obrigatório)                                                 |
-| Listar Livros         | GET         | `http://localhost:8081/api/v1/orders`              | Lista todos os livros cadastrados                                                               |
-| 🔐 Criar Livro        | POST        | `http://localhost:8081/api/v1/orders`              | Cadastra um novo livro (necessita autenticação)                                                 |
-| Mostrar Livro         | GET         | `http://localhost:8081/api/v1/orders/{id}`         | Exibe detalhes de um livro pelo ID                                                              |
-| 🔐 Atualizar Livro    | PUT         | `http://localhost:8081/api/v1/orders/{id}`         | Atualiza dados de um livro (necessita autenticação)                                             |
-| 🔐 Excluir Livro      | DELETE      | `http://localhost:8081/api/v1/orders/{id}`         | Remove um livro do sistema (necessita autenticação)                                             |
+| Listar Pedidos         | GET         | `http://localhost:8081/api/v1/orders`              | Lista todos os pedidos cadastrados                                                               |
+| 🔐 Criar Pedido        | POST        | `http://localhost:8081/api/v1/orders`              | Cadastra um novo pedido (necessita autenticaçãoautenticação)                                                 |
+| Mostrar Pedido         | GET         | `http://localhost:8081/api/v1/orders/{id}`         | Exibe detalhes de um pedido pelo ID                                                              |
+| 🔐 Atualizar Pedido    | PUT         | `http://localhost:8081/api/v1/orders/{id}`         | Atualiza dados de um pedido (necessita autenticação)                                             |
+| 🔐 Excluir Pedido      | DELETE      | `http://localhost:8081/api/v1/orders/{id}`         | Remove um pedido do sistema (necessita autenticação)                                             |
 
 ---
 
@@ -178,7 +177,7 @@ php artisan db:seed
 ## 📦 Estrutura de Pastas
 
 ```bash
-antenna-tracker/
+orders-module/
 ├── .docker/                 # Configurações específicas para Docker
 ├── app/                     # Lógica principal da aplicação
 │   ├── Console/             # Comandos Artisan personalizados
