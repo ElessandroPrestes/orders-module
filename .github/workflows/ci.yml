@@ -1,0 +1,69 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: orders
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: developer
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready -U root"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7.2.4-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🧰 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, bcmath, pdo_pgsql, redis, xdebug
+          coverage: xdebug
+
+      - name: 📦 Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: ⚙️ Copy .env.testing
+        run: cp .env.testing .env
+
+      - name: 🔑 Generate app key
+        run: php artisan key:generate
+
+      - name: 🧪 Run tests with coverage
+        run: vendor/bin/pest --coverage-clover=coverage.xml
+
+      - name: ✅ Enforce minimum coverage
+        run: |
+            COVERAGE=$(grep -oP 'coverage: \K[0-9]+' coverage.xml | sort -nr | head -1)
+            echo "Detected coverage: $COVERAGE%"
+            if [ "$COVERAGE" -lt 80 ]; then
+            echo "❌ Coverage below 80%. Failing build."
+            exit 1
+            fi
+

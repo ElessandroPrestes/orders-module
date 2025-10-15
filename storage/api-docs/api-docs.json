@@ -1,0 +1,29 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Order API",
+        "description": "Documentação da API de pedidos",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/user": {
+            "get": {
+                "summary": "Retorna o usuário autenticado",
+                "operationId": "3d4d297a678246a70ff5ef00bdc2a5c7",
+                "responses": {
+                    "200": {
+                        "description": "Usuário autenticado retornado com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    }
+}

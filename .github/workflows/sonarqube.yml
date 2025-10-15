@@ -1,0 +1,41 @@
+name: SonarQube Analysis
+
+on:
+  workflow_run:
+    workflows: ["Laravel CI"]
+    types:
+      - completed
+
+jobs:
+  sonar-analysis:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Choose Sonar Configuration
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "Branch: $BRANCH_NAME"
+
+          if [[ "$BRANCH_NAME" == "main" ]]; then
+            echo "Using SonarCloud"
+            cp sonar-project-cloud.properties sonar-project.properties
+            echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
+            echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_CLOUD }}" >> $GITHUB_ENV
+          else
+            echo "Using SonarQube Local"
+            cp sonar-project-local.properties sonar-project.properties
+            echo "SONAR_HOST_URL=http://localhost:9000" >> $GITHUB_ENV
+            echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_LOCAL }}" >> $GITHUB_ENV
+          fi
+
+      - name: ✨ Run Sonar Analysis
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
