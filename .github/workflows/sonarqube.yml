@@ -17,21 +17,47 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🔍 Choose Sonar Configuration
+      - name: 🔍 Generate Sonar Configuration
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           echo "Branch: $BRANCH_NAME"
 
           if [[ "$BRANCH_NAME" == "main" ]]; then
             echo "Using SonarCloud"
-            cp sonar-project-cloud.properties sonar-project.properties
             echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
             echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_CLOUD }}" >> $GITHUB_ENV
+
+            cat <<EOF > sonar-project.properties
+            sonar.projectKey=order-module-cloud
+            sonar.organization=elessandrodev
+            sonar.host.url=https://sonarcloud.io
+            sonar.sources=app,routes,config,database,resources,packages
+            sonar.tests=tests
+            sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**
+            sonar.language=php
+            sonar.sourceEncoding=UTF-8
+            sonar.php.coverage.reportPaths=coverage.xml
+            sonar.coverage.minimum=80
+            sonar.verbose=true
+            EOF
+
           else
             echo "Using SonarQube Local"
-            cp sonar-project-local.properties sonar-project.properties
             echo "SONAR_HOST_URL=http://localhost:9000" >> $GITHUB_ENV
             echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_LOCAL }}" >> $GITHUB_ENV
+
+            cat <<EOF > sonar-project.properties
+            sonar.projectKey=order-module-local
+            sonar.host.url=http://localhost:9000
+            sonar.sources=app,routes,config,database,resources,packages
+            sonar.tests=tests
+            sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**
+            sonar.language=php
+            sonar.sourceEncoding=UTF-8
+            sonar.php.coverage.reportPaths=coverage.xml
+            sonar.coverage.minimum=80
+            sonar.verbose=true
+            EOF
           fi
 
       - name: ✨ Run Sonar Analysis
