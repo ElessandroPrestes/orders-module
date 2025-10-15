@@ -26,10 +26,10 @@ jobs:
             echo "Using SonarCloud"
             echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
             echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_CLOUD }}" >> $GITHUB_ENV
-
+            # organization key do SonarCloud (criar secret SONAR_ORGANIZATION)
             printf "%s\n" \
               "sonar.projectKey=order-module-cloud" \
-              "sonar.organization=elessandro-dev" \
+              "sonar.organization=${{ secrets.SONAR_ORGANIZATION }}" \
               "sonar.host.url=https://sonarcloud.io" \
               "sonar.sources=app,routes,config,database,resources" \
               "sonar.tests=tests" \
