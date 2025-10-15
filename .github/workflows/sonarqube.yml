@@ -31,7 +31,7 @@ jobs:
               "sonar.projectKey=order-module-cloud" \
               "sonar.organization=elessandrodev" \
               "sonar.host.url=https://sonarcloud.io" \
-              "sonar.sources=app,routes,config,database,resources,packages" \
+              "sonar.sources=app,routes,config,database,resources" \
               "sonar.tests=tests" \
               "sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**" \
               "sonar.language=php" \
@@ -48,7 +48,7 @@ jobs:
             printf "%s\n" \
               "sonar.projectKey=order-module-local" \
               "sonar.host.url=http://localhost:9000" \
-              "sonar.sources=app,routes,config,database,resources,packages" \
+              "sonar.sources=app,routes,config,database,resources" \
               "sonar.tests=tests" \
               "sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**" \
               "sonar.language=php" \
@@ -60,6 +60,7 @@ jobs:
           fi
 
       - name: ✨ Run Sonar Analysis
+        if: env.SONAR_TOKEN != ''
         uses: SonarSource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
