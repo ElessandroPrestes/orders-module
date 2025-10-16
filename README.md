@@ -134,8 +134,7 @@ php artisan db:seed
 | Listar Pedidos         | GET         | `http://localhost:8081/api/v1/orders`              | Lista todos os pedidos cadastrados                                                               |
 | 🔐 Criar Pedido        | POST        | `http://localhost:8081/api/v1/orders`              | Cadastra um novo pedido (necessita autenticaçãoautenticação)                                                 |
 | Mostrar Pedido         | GET         | `http://localhost:8081/api/v1/orders/{id}`         | Exibe detalhes de um pedido pelo ID                                                              |
-| 🔐 Atualizar Pedido    | PUT         | `http://localhost:8081/api/v1/orders/{id}`         | Atualiza dados de um pedido (necessita autenticação)                                             |
-| 🔐 Excluir Pedido      | DELETE      | `http://localhost:8081/api/v1/orders/{id}`         | Remove um pedido do sistema (necessita autenticação)                                             |
+| 🔐 Cancelar Pedido     | DELETE      | `http://localhost:8081/api/v1/orders/{id}`         | Remove um pedido do sistema (necessita autenticação)                                             |
 
 ---
 

@@ -1,4 +1,4 @@
-name: SonarQube Analysis
+name: SonarCloud Analysis
 
 on:
   workflow_run:
@@ -17,50 +17,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🔍 Generate Sonar Configuration
+      - name: 🔍 Generate SonarCloud Configuration
         run: |
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          echo "Branch: $BRANCH_NAME"
+          echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
+          echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_CLOUD }}" >> $GITHUB_ENV
 
-          if [[ "$BRANCH_NAME" == "main" ]]; then
-            echo "Using SonarCloud"
-            echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
-            echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_CLOUD }}" >> $GITHUB_ENV
-            # organization key do SonarCloud (criar secret SONAR_ORGANIZATION)
-            printf "%s\n" \
-              "sonar.projectKey=order-module-cloud" \
-              "sonar.organization=${{ secrets.SONAR_ORGANIZATION }}" \
-              "sonar.host.url=https://sonarcloud.io" \
-              "sonar.sources=app,routes,config,database,resources" \
-              "sonar.tests=tests" \
-              "sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**" \
-              "sonar.language=php" \
-              "sonar.sourceEncoding=UTF-8" \
-              "sonar.php.coverage.reportPaths=coverage.xml" \
-              "sonar.coverage.minimum=80" \
-              "sonar.verbose=true" > sonar-project.properties
+          printf "%s\n" \
+            "sonar.projectKey=order-module-cloud" \
+            "sonar.organization=${{ secrets.SONAR_ORGANIZATION }}" \
+            "sonar.host.url=https://sonarcloud.io" \
+            "sonar.sources=app,routes,config,database,resources" \
+            "sonar.tests=tests" \
+            "sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**" \
+            "sonar.language=php" \
+            "sonar.sourceEncoding=UTF-8" \
+            "sonar.php.coverage.reportPaths=coverage.xml" \
+            "sonar.coverage.minimum=80" \
+            "sonar.verbose=true" > sonar-project.properties
 
-          else
-            echo "Using SonarQube Local"
-            echo "SONAR_HOST_URL=http://localhost:9000" >> $GITHUB_ENV
-            echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN_LOCAL }}" >> $GITHUB_ENV
-
-            printf "%s\n" \
-              "sonar.projectKey=order-module-local" \
-              "sonar.host.url=http://localhost:9000" \
-              "sonar.sources=app,routes,config,database,resources" \
-              "sonar.tests=tests" \
-              "sonar.exclusions=vendor/**,storage/**,node_modules/**,public/**,bootstrap/**" \
-              "sonar.language=php" \
-              "sonar.sourceEncoding=UTF-8" \
-              "sonar.php.coverage.reportPaths=coverage.xml" \
-              "sonar.coverage.minimum=80" \
-              "sonar.verbose=true" > sonar-project.properties
-
-          fi
-
-      - name: ✨ Run Sonar Analysis
-        if: env.SONAR_TOKEN != ''
+      - name: ✨ Run SonarCloud Analysis
         uses: SonarSource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
