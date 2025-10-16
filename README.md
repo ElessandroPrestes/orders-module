@@ -7,7 +7,7 @@
 ## 🧩 Funcionalidades
 
 ### 📖 Pedidos
-- Cadastro, listagem, exibição, edição e exclusão
+- Cadastro, listagem, cancelamento
 - Validação de campos obrigatórios
 
 ### 🔐 Segurança
@@ -19,7 +19,7 @@
 - Swagger UI para testes e visualização dos endpoints
 
 ### 📊 Qualidade de Código
-- Análise contínua com SonarQube
+- Análise contínua com SonarCloud (SonarQube na nuvem)
 - Métricas de cobertura, duplicação e vulnerabilidades
 
 ---
@@ -31,12 +31,11 @@
 - **Service**: regras de negócio centralizadas
 - **Repository**: abstração do acesso a dados
 - **Interface**: contratos para repositórios
-- **Trait**: padronização de respostas
 
 ### 🧪 Testes
 - PestPHP com TDD
 - Cobertura por função, linha e arquivo
-- Relatório HTML via GitLab CI
+- Relatório de cobertura com badge do Codecov + integração com GitHub Actions
 
 ### 🔁 Boas Práticas
 - Princípios SOLID
@@ -106,10 +105,12 @@ php artisan db:seed
   composer test:coverage
 ```
 
+
 ## 📈 Relatório de Cobertura
 
-[![CI](https://github.com/ElessandroPrestes/book-base/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ElessandroPrestes/book-base/actions/workflows/ci.yml)
-[![Coverage](https://codecov.io/gh/ElessandroPrestes/book-base/branch/main/graph/badge.svg)](https://codecov.io/gh/ElessandroPrestes/book-base)
+[![CI](https://github.com/ElessandroPrestes/orders-module/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ElessandroPrestes/orders-module/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/ElessandroPrestes/orders-module/branch/main/graph/badge.svg)](https://codecov.io/gh/ElessandroPrestes/orders-module)
+
 
 
 📈 Com esse relatório, você pode inspecionar a cobertura de testes por linha, função e arquivo — focado especialmente em `app/`.
@@ -119,7 +120,7 @@ php artisan db:seed
 > Caso precise entrar novamente no container:
 > 
 > ```bash
-> docker compose exec book_app1 bash
+> docker compose exec order_app1 bash
 > 
 
 ---
@@ -128,7 +129,7 @@ php artisan db:seed
 
 | Ação                  | Método HTTP | URL                                               | Descrição                                                                                       |
 |-----------------------|-------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| Login                 | POST        | `http://localhost:8081/api/v1/login`              | Autentica usuário e retorna token<br><pre>email: usuario@bookbase.com<br>senha: 123456</pre>     |
+| Login                 | POST        | `http://localhost:8081/api/v1/login`              | Autentica usuário e retorna token<br><pre>email: usuario@order-module.com<br>senha: 123456</pre>     |
 | 🔐 Logout             | POST        | `http://localhost:8081/api/v1/logout`             | Encerra a sessão do usuário (token obrigatório)                                                 |
 | Listar Pedidos         | GET         | `http://localhost:8081/api/v1/orders`              | Lista todos os pedidos cadastrados                                                               |
 | 🔐 Criar Pedido        | POST        | `http://localhost:8081/api/v1/orders`              | Cadastra um novo pedido (necessita autenticaçãoautenticação)                                                 |
@@ -152,7 +153,7 @@ php artisan db:seed
 | Swagger UI          | http://localhost:8081/api/documentation | Interface interativa para explorar e testar os endpoints da API                                                 |
 | Laravel Telescope   | http://localhost:8081/telescope         | Análise e monitoramento da aplicação                                                                            |
 | Laravel Horizon     | http://localhost:8081/horizon           | Painel de monitoramento e controle de filas com Redis                                                           |
-| Adminer (PostgreSQL GUI) | http://localhost:8080                   | <pre>Sistema: `PostgreSQL`<br>Servidor: `order_postgres`<br>Usuário: `root`  <br>Senha: `developer`  <br>Base de dados: `orders_db` </pre>|
+| Adminer (PostgreSQL GUI) | http://localhost:8080                   | <pre>Sistema: `PostgreSQL`<br>Servidor: `order_postgres`<br>Usuário: `root`  <br>Senha: `developer`  <br>Base de dados: `orders` </pre>|
 | SonarQube           | http://localhost:9000                   | <pre>Usuário: `admin`<br>Senha: `admin`</pre>                                                            |
 
 ---
