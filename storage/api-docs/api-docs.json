@@ -24,6 +24,267 @@
                     }
                 ]
             }
+        },
+        "/api/v1/orders": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Lista pedidos do usuário autenticado",
+                "operationId": "00d3856d2d3d93124e0cc021d0cb5b79",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "pending"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de pedidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Cria um novo pedido",
+                "operationId": "79da0a1adcc617490783dfd61927ff56",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOrderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pedido criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Exibe detalhes de um pedido",
+                "operationId": "b2f9845bf9fe11158e0e43f1dd0c5802",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do pedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Cancela um pedido do usuário autenticado",
+                "operationId": "7fb5c5cde4a48c07f8f7551e1abfac97",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cancelamento realizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não autorizada"
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro interno ao cancelar pedido"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
-    }
+    },
+    "components": {
+        "schemas": {
+            "OrderResource": {
+                "title": "Order",
+                "description": "Representação de um pedido",
+                "required": [
+                    "id",
+                    "user_id",
+                    "status",
+                    "items",
+                    "created_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "product_id",
+                                "quantity"
+                            ],
+                            "properties": {
+                                "product_id": {
+                                    "type": "integer",
+                                    "example": 42
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 3
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-16T14:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-16T14:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreOrderRequest": {
+                "title": "Store Order Request",
+                "description": "Dados para criação de um pedido",
+                "required": [
+                    "items"
+                ],
+                "properties": {
+                    "items": {
+                        "description": "Lista de itens do pedido",
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "product_id",
+                                "quantity"
+                            ],
+                            "properties": {
+                                "product_id": {
+                                    "type": "integer",
+                                    "example": 42
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 3
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Pedidos",
+            "description": "Pedidos"
+        }
+    ]
 }
