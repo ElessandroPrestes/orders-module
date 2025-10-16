@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "elessandro-dev",
+        "projectKey": "ElessandroPrestes_orders-module"
+    }
+}
