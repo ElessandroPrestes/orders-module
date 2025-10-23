@@ -44,7 +44,7 @@ services:
 
   # Horizon
   order_horizon:
-    image: elessandrodev/php-core:v1.0.1
+    image: elessandrodev/php-core:v1.0.3
     container_name: order_horizon
     working_dir: /var/www
     restart: on-failure
@@ -62,7 +62,7 @@ services:
 
   # Scheduler
   order_scheduler:
-    image: elessandrodev/php-core:v1.0.1
+    image: elessandrodev/php-core:v1.0.3
     container_name: order_scheduler
     working_dir: /var/www
     restart: on-failure
